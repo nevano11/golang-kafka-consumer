@@ -1,0 +1,126 @@
+basePath: /
+definitions:
+  entity.Human:
+    properties:
+      age:
+        type: integer
+      first_name:
+        type: string
+      gender:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      nationality:
+        type: string
+      surname:
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: fio sender
+  title: Kafka producer
+  version: "1.0"
+paths:
+  /human:
+    delete:
+      consumes:
+      - application/json
+      description: method to delete human
+      parameters:
+      - description: human id
+        in: query
+        name: humanId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: Ok
+          schema:
+            type: string
+      summary: delete human
+    get:
+      consumes:
+      - application/json
+      description: method to select humans
+      parameters:
+      - description: surname
+        in: query
+        name: surname
+        type: string
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: lastname
+        in: query
+        name: lastname
+        type: string
+      - description: age
+        in: query
+        name: age
+        type: integer
+      - description: nationality
+        in: query
+        name: nationality
+        type: string
+      - description: gender
+        in: query
+        name: gender
+        type: string
+      - description: pageNum
+        in: query
+        name: pageNum
+        type: integer
+      - description: pageSize
+        in: query
+        name: pageSize
+        type: integer
+      responses:
+        "200":
+          description: Ok
+          schema:
+            type: string
+      summary: get humans
+    post:
+      consumes:
+      - application/json
+      description: method to create human
+      parameters:
+      - description: The input todo struct
+        in: body
+        name: human
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Human'
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+      summary: create human
+    put:
+      consumes:
+      - application/json
+      description: method to edit human
+      parameters:
+      - description: human id
+        in: query
+        name: humanId
+        required: true
+        type: integer
+      - description: The input todo struct
+        in: body
+        name: human
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Human'
+      responses:
+        "200":
+          description: Ok
+          schema:
+            type: string
+      summary: edit human
+swagger: "2.0"

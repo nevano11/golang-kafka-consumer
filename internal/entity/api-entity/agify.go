@@ -1,4 +1,4 @@
-package dao
+package api_entity
 
 type Agify struct {
 	Count int    `json:"count"`

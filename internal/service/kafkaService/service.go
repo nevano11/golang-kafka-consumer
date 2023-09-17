@@ -1,20 +1,20 @@
-package service
+package kafkaService
 
 import (
 	"golang-kafka/internal/entity"
 )
 
-type KafkaService struct {
+type Service struct {
 	ConsumeService
 	Processor
 	ProduceService
 }
 
 type HumanSaver interface {
-	CreateHuman(human entity.DbFio) (int, error)
+	CreateHuman(human entity.Human) (int, error)
 }
 
-func NewKafkaService(fioTopic, fioFailTopic, kafkaConfigPath string, saver HumanSaver) (*KafkaService, error) {
+func NewKafkaService(fioTopic, fioFailTopic, kafkaConfigPath string, saver HumanSaver) (*Service, error) {
 	producer, err := NewKafkaProduceService(fioFailTopic, kafkaConfigPath)
 	if err != nil {
 		return nil, err
@@ -27,14 +27,14 @@ func NewKafkaService(fioTopic, fioFailTopic, kafkaConfigPath string, saver Human
 		return nil, err
 	}
 
-	return &KafkaService{
+	return &Service{
 		ConsumeService: consumer,
 		Processor:      processor,
 		ProduceService: producer,
 	}, nil
 }
 
-func (s *KafkaService) Shutdown() {
+func (s *Service) Shutdown() {
 	s.ConsumeService.Shutdown()
 	s.ProduceService.Shutdown()
 }
