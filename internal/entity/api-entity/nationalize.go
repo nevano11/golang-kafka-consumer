@@ -1,4 +1,4 @@
-package dao
+package api_entity
 
 type Nationalize struct {
 	Count   int    `json:"count"`

@@ -1,4 +1,4 @@
-package service
+package kafkaService
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"golang-kafka/internal/entity"
-	"golang-kafka/internal/entity/dao"
+	"golang-kafka/internal/entity/api-entity"
 	"io"
 	"net/http"
 	"sync"
@@ -67,9 +67,9 @@ func (s *FioProcessor) validateFio(fio entity.Fio) bool {
 	return isGood(fio.Surname) && isGood(fio.FirstName)
 }
 
-func (s *FioProcessor) addNewFields(fio entity.Fio) (entity.DbFio, error) {
+func (s *FioProcessor) addNewFields(fio entity.Fio) (entity.Human, error) {
 	// result entity
-	dbfio := entity.DbFio{
+	dbfio := entity.Human{
 		Id:          0,
 		Surname:     fio.Surname,
 		FirstName:   fio.FirstName,
@@ -86,7 +86,7 @@ func (s *FioProcessor) addNewFields(fio entity.Fio) (entity.DbFio, error) {
 	apis := make(map[string]func(b []byte))
 	apis[fmt.Sprintf("https://api.agify.io/?name=%s", fio.FirstName)] =
 		func(b []byte) {
-			var target dao.Agify
+			var target api_entity.Agify
 			if err := json.Unmarshal(b, &target); err != nil {
 				hasFailOnApi = true
 				logrus.Error("failed to unmarshal Agify" + string(b))
@@ -96,7 +96,7 @@ func (s *FioProcessor) addNewFields(fio entity.Fio) (entity.DbFio, error) {
 		}
 	apis[fmt.Sprintf("https://api.genderize.io/?name=%s", fio.FirstName)] =
 		func(b []byte) {
-			var target dao.Genderize
+			var target api_entity.Genderize
 			if err := json.Unmarshal(b, &target); err != nil {
 				hasFailOnApi = true
 				logrus.Error("failed to unmarshal Genderize " + string(b))
@@ -106,7 +106,7 @@ func (s *FioProcessor) addNewFields(fio entity.Fio) (entity.DbFio, error) {
 		}
 	apis[fmt.Sprintf("https://api.nationalize.io/?name=%s", fio.FirstName)] =
 		func(b []byte) {
-			var target dao.Nationalize
+			var target api_entity.Nationalize
 			if err := json.Unmarshal(b, &target); err != nil {
 				hasFailOnApi = true
 				logrus.Error("failed to unmarshal Nationalize" + string(b))

@@ -1,0 +1,1 @@
+drop function select_humans;

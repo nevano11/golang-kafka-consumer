@@ -7,7 +7,8 @@ import (
 	"github.com/spf13/viper"
 	"golang-kafka/internal/handler"
 	"golang-kafka/internal/repository"
-	"golang-kafka/internal/service"
+	"golang-kafka/internal/service/crudService"
+	"golang-kafka/internal/service/kafkaService"
 	"net/http"
 	"time"
 )
@@ -41,8 +42,8 @@ func main() {
 	// Repository
 	rep := repository.NewRepository(db)
 
-	// KafkaService
-	kafkaService, err := service.NewKafkaService(
+	// kafka Service
+	kafkaService, err := kafkaService.NewKafkaService(
 		viper.GetString("kafka.topic"),
 		viper.GetString("kafka.topic-on-fail"),
 		viper.GetString("kafka.config-path"),
@@ -52,8 +53,11 @@ func main() {
 	}
 	defer kafkaService.Shutdown()
 
+	// Rest service
+	restService := crudService.NewService(rep)
+
 	// handler
-	han := handler.NewHandler(kafkaService)
+	han := handler.NewHandler(restService)
 
 	// Routes
 	routes := han.InitRoutes()

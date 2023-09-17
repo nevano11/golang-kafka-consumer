@@ -1,4 +1,4 @@
-package dao
+package api_entity
 
 type Genderize struct {
 	Count       int     `json:"count"`

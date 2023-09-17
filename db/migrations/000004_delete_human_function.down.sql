@@ -1,0 +1,1 @@
+drop function delete_human
