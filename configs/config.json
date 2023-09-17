@@ -1,0 +1,21 @@
+{
+  "logger": {
+    "log-level": "debug"
+  },
+  "server": {
+    "port": "8081"
+  },
+  "kafka": {
+    "topic": "FIO",
+    "topic-on-fail": "FIOFAILED",
+    "config-path": "configs/kafka.properties"
+  },
+  "database": {
+    "username" : "postgres",
+    "password" : "password",
+    "dbname" : "humans",
+    "host": "localhost",
+    "port" : "5002",
+    "sslmode": "disable"
+  }
+}

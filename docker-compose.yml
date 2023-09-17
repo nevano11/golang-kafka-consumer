@@ -1,0 +1,20 @@
+version: '3'
+services:
+  broker:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker
+    ports:
+      - "${X_KAFKA_PORT:-9092}:9092"
+    env_file:
+      - .env
+    restart: always
+  pg-db:
+    image: postgres
+    container_name: pg
+    ports:
+      - "${X_POSTGRES_PORT:-5432}:5432"
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - ./pgsql/data/:/var/lib/postgresql/data
